@@ -21,6 +21,7 @@ const emits = defineEmits<Emits>()
             @change="
                 (event) => emits('changeCount', Number((event.target as HTMLInputElement).value))
             "
+            min="0"
             type="number"
         />
         <input

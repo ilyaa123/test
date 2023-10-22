@@ -13,7 +13,7 @@ const listStore = useListStore()
 const list = computed(() => listStore.list)
 
 const changeCheckedListItem = (id: number, value: boolean) => {
-    value ? listStore.setCheckedListItem(id) : listStore.removeCheckListItem(id)
+    listStore.setCheckedListItem(id, value)
 }
 </script>
 <template>
@@ -22,29 +22,46 @@ const changeCheckedListItem = (id: number, value: boolean) => {
             <ListItem
                 :label="listItem.title"
                 :checked="listItem.children.every((item) => item.checked)"
-                @changeChecked="(value) => changeCheckedListItem(listItem.id, value)"
+                :is-checked-once="!!listItem.children.find((item) => item.checked)"
+                @change-checked="(value) => changeCheckedListItem(listItem.id, value)"
             >
                 <template #subfields>
                     <ListItemSubfield
                         v-for="subfield in listItem.children"
                         :title="subfield.text"
-                        @changeChecked="
-                            (value) => listStore.changeCheckedItem(listItem.id, subfield.id, value)
-                        "
                         :checked="subfield.checked"
                         :key="subfield.id"
+                        @change-checked="
+                            (value) =>
+                                listStore.changeItemValue(
+                                    listItem.id,
+                                    subfield.id,
+                                    'checked',
+                                    value
+                                )
+                        "
                     >
                         <template #actions>
                             <ListActions
                                 :color="subfield.color"
                                 :count="subfield.count"
-                                @changeColor="
+                                @change-color="
                                     (value) =>
-                                        listStore.changeColorItem(listItem.id, subfield.id, value)
+                                        listStore.changeItemValue(
+                                            listItem.id,
+                                            subfield.id,
+                                            'color',
+                                            value
+                                        )
                                 "
-                                @changeCount="
+                                @change-count="
                                     (value) =>
-                                        listStore.changeCountItem(listItem.id, subfield.id, value)
+                                        listStore.changeItemValue(
+                                            listItem.id,
+                                            subfield.id,
+                                            'count',
+                                            value
+                                        )
                                 "
                             />
                         </template>
