@@ -5,7 +5,3 @@
         <slot />
     </ul>
 </template>
-<style scoped>
-.list {
-}
-</style>

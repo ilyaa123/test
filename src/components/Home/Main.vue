@@ -13,7 +13,7 @@ const list = computed(() => listStore.list)
 </script>
 <template>
     <ExpansionPanels>
-        <template v-for="listItem in list">
+        <template v-for="listItem in list" :key="listItem.id">
             <ExpansionPanel
                 v-show="listItem.children.filter((item) => item.checked).length > 0"
                 :label="listItem.title"
